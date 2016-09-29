@@ -1,11 +1,13 @@
 Require:
 - docker
 - docker-compose
+- export PORT=666
 
 docker-compose build
 docker-compose up -d
 docker-compose run zongasock supervisorctl -c /etc/supervisor/conf.d/supervisor.conf reload
 docker-compose run zongasock composer update
+docker-compose scale zonga-socks=2
 
 supervisorctl -c supervisor.conf reread
 supervisorctl -c supervisor.conf update
