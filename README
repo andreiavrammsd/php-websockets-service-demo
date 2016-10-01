@@ -5,9 +5,10 @@ Require:
 
 docker-compose build
 docker-compose up -d
-#docker-compose run zonga-socks supervisorctl -c /etc/supervisor/conf.d/supervisord.conf reload
+#docker-compose run zonga-socks /usr/bin/supervisorctl -c /etc/supervisor/conf.d/supervisord.conf reload
 docker-compose run zonga-socks composer update
 docker-compose scale zonga-socks=2
+docker-compose run zonga-socks /zonga/vendor/bin/phpunit -c src/Zonga/Tests/phpunit.xml
 
 supervisorctl -c supervisor.conf reread
 supervisorctl -c supervisor.conf update
