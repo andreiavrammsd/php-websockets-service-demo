@@ -27,12 +27,6 @@ interface AppInterface
     public function setConnection(ConnectionInterface $connection);
 
     /**
-     * @param string $session
-     * @return bool
-     */
-    public function isSessionValid(string $session): bool;
-
-    /**
      * @param string $message
      */
     public function handle(string $message);
