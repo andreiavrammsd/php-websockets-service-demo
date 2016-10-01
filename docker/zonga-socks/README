@@ -5,8 +5,8 @@ Require:
 
 docker-compose build
 docker-compose up -d
-docker-compose run zongasock supervisorctl -c /etc/supervisor/conf.d/supervisor.conf reload
-docker-compose run zongasock composer update
+#docker-compose run zonga-socks supervisorctl -c /etc/supervisor/conf.d/supervisord.conf reload
+docker-compose run zonga-socks composer update
 docker-compose scale zonga-socks=2
 
 supervisorctl -c supervisor.conf reread
