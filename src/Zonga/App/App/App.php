@@ -49,7 +49,10 @@ class App implements AppInterface
      */
     private $session;
 
-    public function __construct()
+    /**
+     * @param array $config
+     */
+    public function __construct(array $config)
     {
         $this->di = new CliDI();
 
@@ -64,7 +67,6 @@ class App implements AppInterface
             )
             ->register();
 
-        $config = include $root . '/config/config.php';
         $this->di->set('config', new \Phalcon\Config($config));
 
         foreach ($config['services'] as $name => $definition) {
@@ -95,7 +97,6 @@ class App implements AppInterface
     {
         $username = $this->session->getUsername();
         $sessionId = $this->session->getSessionId();
-        $key = $this->getClientStorageKey($username, $sessionId);
         $client = [
             'host' => gethostname(),
             'connection' => $resourceId,
@@ -103,7 +104,9 @@ class App implements AppInterface
             'username' => $username,
             'time' => time(),
         ];
-        $this->storage->set($key, $client);
+        $data = $this->storage->get($username);
+        $data[$resourceId] = $client;
+        $this->storage->set($username, $data);
     }
 
     /**
@@ -113,9 +116,15 @@ class App implements AppInterface
     {
         if ($this->session->isValid()) {
             $username = $this->session->getUsername();
-            $sessionId = $this->session->getSessionId();
-            $key = $this->getClientStorageKey($username, $sessionId);
-            $this->storage->delete($key);
+            $data = $this->storage->get($username);
+            if (array_key_exists($resourceId, $data)) {
+                unset($data[$resourceId]);
+            }
+            if (count($data) == 0) {
+                $this->storage->delete($username);
+            } else {
+                $this->storage->set($username, $data);
+            }
         }
     }
 
@@ -172,15 +181,5 @@ class App implements AppInterface
     public function getResponse(): string
     {
         return $this->response->getContent();
-    }
-
-    /**
-     * @param string $username
-     * @param string $session
-     * @return string
-     */
-    private function getClientStorageKey(string $username, string $session) : string
-    {
-        return sprintf('socket_clients:%s:%s', $username, $session);
     }
 }

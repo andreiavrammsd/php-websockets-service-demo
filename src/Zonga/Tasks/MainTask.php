@@ -12,7 +12,7 @@ class MainTask extends Task
     public function mainAction(array $params): array
     {
         return [
-            'message' => sprintf('Helou, %s', $params['name']),
+            'message' => sprintf('Hello, %s (%s)', $this->session->getUsername(), $params['name']),
             'routes' => $this->config->get('routes'),
         ];
     }

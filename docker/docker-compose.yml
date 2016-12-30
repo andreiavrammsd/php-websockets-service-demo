@@ -4,7 +4,7 @@ services:
   zonga-socks:
     build: ./zonga-socks
     ports:
-      - "${PORT}:666"
+      - "666:666"
     restart: on-failure
     volumes:
       - ../:/zonga

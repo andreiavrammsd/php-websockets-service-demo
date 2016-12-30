@@ -8,6 +8,6 @@ class QuitTask extends Task
     {
         $this->connection->close();
         
-        return ['message' => 'La revedere'];
+        return ['message' => 'Goodbye!'];
     }
 }

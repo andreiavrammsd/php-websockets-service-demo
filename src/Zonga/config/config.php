@@ -2,6 +2,8 @@
 
 $config = [];
 
+$config['server_port'] = 666;
+
 $config['routes'] = [
     'hello' => 'Main::main',
     'quit' => 'Main::quit',
